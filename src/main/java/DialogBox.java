@@ -1,4 +1,7 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,7 +18,7 @@ public class DialogBox extends HBox {
     /**
      * Creates a dialog box for the supplied text and display picture.
      */
-    public DialogBox(String text, Image image) {
+    private DialogBox(String text, Image image) {
         this.text = new Label(text);
         displayPicture = new ImageView(image);
 
@@ -25,5 +28,31 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_RIGHT);
 
         getChildren().addAll(this.text, displayPicture);
+    }
+
+    /**
+     * Flips the dialog box so the image appears on the left and the text on the right.
+     */
+    private void flip() {
+        setAlignment(Pos.TOP_LEFT);
+        ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
+        FXCollections.reverse(children);
+        getChildren().setAll(children);
+    }
+
+    /**
+     * Returns a dialog box representing user input.
+     */
+    public static DialogBox getUserDialog(String text, Image image) {
+        return new DialogBox(text, image);
+    }
+
+    /**
+     * Returns a dialog box representing Duke's response.
+     */
+    public static DialogBox getDukeDialog(String text, Image image) {
+        DialogBox dialogBox = new DialogBox(text, image);
+        dialogBox.flip();
+        return dialogBox;
     }
 }
