@@ -1,5 +1,10 @@
+import java.io.IOException;
+import java.util.Collections;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -11,33 +16,33 @@ import javafx.scene.layout.HBox;
  * Represents a dialog box containing text and the speaker's display picture.
  */
 public class DialogBox extends HBox {
-
-    private Label text;
+    @FXML
+    private Label dialog;
+    @FXML
     private ImageView displayPicture;
 
-    /**
-     * Creates a dialog box for the supplied text and display picture.
-     */
     private DialogBox(String text, Image image) {
-        this.text = new Label(text);
-        displayPicture = new ImageView(image);
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+            fxmlLoader.setController(this);
+            fxmlLoader.setRoot(this);
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        this.text.setWrapText(true);
-        displayPicture.setFitWidth(100.0);
-        displayPicture.setFitHeight(100.0);
-        setAlignment(Pos.TOP_RIGHT);
-
-        getChildren().addAll(this.text, displayPicture);
+        dialog.setText(text);
+        displayPicture.setImage(image);
     }
 
     /**
      * Flips the dialog box so the image appears on the left and the text on the right.
      */
     private void flip() {
-        setAlignment(Pos.TOP_LEFT);
         ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
-        FXCollections.reverse(children);
+        Collections.reverse(children);
         getChildren().setAll(children);
+        setAlignment(Pos.TOP_LEFT);
     }
 
     /**
