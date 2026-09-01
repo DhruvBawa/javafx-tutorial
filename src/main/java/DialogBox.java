@@ -43,6 +43,7 @@ public class DialogBox extends HBox {
         Collections.reverse(children);
         getChildren().setAll(children);
         setAlignment(Pos.TOP_LEFT);
+        dialog.getStyleClass().add("reply-label");
     }
 
     /**
@@ -58,6 +59,35 @@ public class DialogBox extends HBox {
     public static DialogBox getDukeDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
+        return dialogBox;
+    }
+
+    /**
+     * Applies the style associated with the supplied command type.
+     */
+    private void changeDialogStyle(String commandType) {
+        switch (commandType) {
+        case "AddCommand":
+            dialog.getStyleClass().add("add-label");
+            break;
+        case "MarkCommand":
+            dialog.getStyleClass().add("marked-label");
+            break;
+        case "DeleteCommand":
+            dialog.getStyleClass().add("delete-label");
+            break;
+        default:
+            // No additional style is needed.
+        }
+    }
+
+    /**
+     * Returns a styled dialog box representing Duke's response to a command.
+     */
+    public static DialogBox getDukeDialog(String text, Image image, String commandType) {
+        DialogBox dialogBox = new DialogBox(text, image);
+        dialogBox.flip();
+        dialogBox.changeDialogStyle(commandType);
         return dialogBox;
     }
 }
